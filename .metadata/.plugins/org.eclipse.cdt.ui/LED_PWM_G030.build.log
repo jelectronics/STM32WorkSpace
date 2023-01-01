@@ -1,0 +1,18 @@
+20:52:31 **** Incremental Build of configuration Debug for project LED_PWM_G030 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G030xx -c -I../Core/Inc -I../Drivers/STM32G0xx_HAL_Driver/Inc -I../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/system_stm32g0xx.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G030xx -c -I../Core/Inc -I../Drivers/STM32G0xx_HAL_Driver/Inc -I../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/system_stm32g0xx.d" -MT"Core/Src/system_stm32g0xx.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/system_stm32g0xx.o"
+arm-none-eabi-gcc -o "LED_PWM_G030.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Jan\STM32CubeIDE\workspace_1.10.1\LED_PWM_G030\STM32G030F6PX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LED_PWM_G030.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: LED_PWM_G030.elf
+ 
+arm-none-eabi-size   LED_PWM_G030.elf 
+arm-none-eabi-objdump -h -S  LED_PWM_G030.elf  > "LED_PWM_G030.list"
+   text	   data	    bss	    dec	    hex	filename
+  10164	     20	   1652	  11836	   2e3c	LED_PWM_G030.elf
+Finished building: default.size.stdout
+ 
+Finished building: LED_PWM_G030.list
+ 
+
+20:52:32 Build Finished. 0 errors, 0 warnings. (took 1s.470ms)
+

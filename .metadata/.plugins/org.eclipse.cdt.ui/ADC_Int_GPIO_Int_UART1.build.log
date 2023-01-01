@@ -1,0 +1,10 @@
+22:17:50 **** Incremental Build of configuration Debug for project ADC_Int_GPIO_Int_UART1 ****
+make -j4 all 
+arm-none-eabi-size   ADC_Int_GPIO_Int_UART1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  17592	     20	   1932	  19544	   4c58	ADC_Int_GPIO_Int_UART1.elf
+Finished building: default.size.stdout
+ 
+
+22:17:51 Build Finished. 0 errors, 0 warnings. (took 318ms)
+

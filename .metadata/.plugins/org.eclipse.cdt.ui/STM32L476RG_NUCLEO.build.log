@@ -1,0 +1,9 @@
+21:06:16 **** Clean-only build of configuration Debug for project STM32L476RG_NUCLEO ****
+make clean 
+Cannot run program "make": Launching failed
+
+Error: Program "make" not found in PATH
+PATH=[C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE//plugins/com.st.stm32cube.ide.jre.win64_2.2.0.202203101208/jre/bin/server;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE//plugins/com.st.stm32cube.ide.jre.win64_2.2.0.202203101208/jre/bin;C:\SynaptiCAD\bin\win32;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\SynaptiCAD\bin;C:\Users\Jan\AppData\Local\Microsoft\WindowsApps;;C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE;]
+
+21:06:16 Build Failed. 1 errors, 0 warnings. (took 60ms)
+

@@ -1,0 +1,557 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include "fonts.h"
+#include "ssd1306.h"
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+//Digital pot-----------------
+int AD5111Pos = 0;
+int AD5111GoalPos = 0;
+int AD5111MaxPos = 32;
+int AD5111MinPos = 0;
+int Button_Status = 0;
+int Button_UP = 0;
+int Button_DOWN = 0;
+int countClear = 0;
+int Bussy = 0;
+int EnableUP = 1 ;
+int EnableDOWN = 1;
+// OledDisplay -------------------------------
+char Pos[5];
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_I2C1_Init(void);
+/* USER CODE BEGIN PFP */
+
+void incValue(void);
+void decValue(void);
+void saveMem(void);
+void AD5111_UpdateParamter(void);
+void AD5111_GoToMax(void);
+void AD5111_GoToMin(void);
+void onceClearLCD(void);
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+
+
+
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+
+
+
+
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_I2C1_Init();
+  /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin,GPIO_PIN_SET);
+  AD5111Pos = 32;
+  AD5111_GoToMin();
+  AD5111_UpdateParamter();
+  AD5111Pos = 0;
+
+
+
+  SSD1306_Init();
+
+      SSD1306_GotoXY (0,0);
+      SSD1306_Puts (" UV-SENSOR", &Font_11x18, 1);
+      SSD1306_GotoXY (0, 30);
+      SSD1306_Puts ("ePROGRAMMER", &Font_11x18, 1);
+      SSD1306_UpdateScreen();
+      HAL_Delay (1000);
+
+
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+//clear once display
+
+
+// increment by button up ------------------------------
+	 if ( AD5111Pos >= AD5111MaxPos)
+
+	  {
+		 SSD1306_Clear();
+		 SSD1306_GotoXY (0,0);
+		 SSD1306_Puts (" Max. Step", &Font_11x18, 1);
+		 SSD1306_GotoXY (0, 30);
+		 SSD1306_Puts ("Reached", &Font_11x18, 1);
+		 SSD1306_UpdateScreen();
+		 HAL_Delay (1000);
+		 EnableUP = 0 ;
+
+	      }
+
+	 if ( AD5111Pos <= AD5111MinPos)
+
+	  {
+		 SSD1306_Clear();
+		 SSD1306_GotoXY (0,0);
+		 SSD1306_Puts (" Min. Step", &Font_11x18, 1);
+		 SSD1306_GotoXY (0, 30);
+		 SSD1306_Puts ("Reached", &Font_11x18, 1);
+		 SSD1306_UpdateScreen();
+		 HAL_Delay (1000);
+	     EnableDOWN = 0 ;
+
+	 	    }
+
+	  if ( Button_UP == 1 && EnableUP == 1)
+	  {
+		  EnableDOWN = 1 ;
+		  onceClearLCD();
+		  AD5111Pos = AD5111Pos + 1;
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin,GPIO_PIN_RESET); // Toggle The Output (LED) Pin
+		  incValue();
+		  HAL_Delay(1);
+		  saveMem();
+		  HAL_Delay(500);
+          itoa(AD5111Pos,Pos,10);
+		  //SSD1306_Clear();
+		  SSD1306_GotoXY (0,0);
+		  SSD1306_Puts ("Digital Resistor", &Font_7x10, 1);
+		  SSD1306_GotoXY (0,30);
+		  SSD1306_Puts ("Step: ", &Font_11x18, 1);
+		  SSD1306_GotoXY (66, 30);
+		  SSD1306_Puts ("    ", &Font_11x18, 1);
+		  SSD1306_UpdateScreen();
+		  HAL_Delay(500);
+		  SSD1306_GotoXY (66, 30);
+		  SSD1306_Puts(Pos,&Font_11x18, 1);
+		  SSD1306_UpdateScreen();
+		  HAL_Delay(500);
+
+		  Button_Status = 0;
+		  Button_UP = 0;
+		  Button_DOWN = 0;
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin,GPIO_PIN_SET);
+		  Bussy = 0;
+
+	  }
+//////////////////////////-------------------------------
+	  // decrement by button DOWN ------------------------------
+	  	  if ( Button_DOWN == 1 && EnableDOWN == 1 )
+	  	  {
+	  		  EnableUP = 1 ;
+	  		  onceClearLCD();
+	  		  AD5111Pos = AD5111Pos -1;
+	  		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin,GPIO_PIN_RESET); // Toggle The Output (LED) Pin
+	  		  decValue();
+	  		  HAL_Delay(1);
+	  		  saveMem();
+	  		  HAL_Delay(500);
+	          itoa(AD5111Pos,Pos,10);
+	          SSD1306_GotoXY (0,0);
+	          SSD1306_Puts ("Digital Resistor", &Font_7x10, 1);
+	          SSD1306_GotoXY (0,30);
+	          SSD1306_Puts ("Step:", &Font_11x18, 1);
+	          SSD1306_GotoXY (66, 30);
+	          SSD1306_Puts ("    ", &Font_11x18, 1);
+	          SSD1306_UpdateScreen();
+	          HAL_Delay(500);
+	          SSD1306_GotoXY (66, 30);
+	          SSD1306_Puts(Pos,&Font_11x18, 1);
+	  		  SSD1306_UpdateScreen();
+	  		  HAL_Delay(500);
+
+	  		 Button_Status = 0;
+	  		 Button_UP = 0;
+	  		 Button_DOWN = 0;
+	  		 HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin,GPIO_PIN_SET);
+	  		 Bussy = 0;
+
+	  	  }
+	  //////////////////////////-------------------------------
+
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, CLK_Pin|UP_DOWN_Pin|CS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Button_Pin */
+  GPIO_InitStruct.Pin = Button_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(Button_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : CLK_Pin CS_Pin */
+  GPIO_InitStruct.Pin = CLK_Pin|CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : UP_DOWN_Pin */
+  GPIO_InitStruct.Pin = UP_DOWN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(UP_DOWN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : UP_Pin DOWN_Pin */
+  GPIO_InitStruct.Pin = UP_Pin|DOWN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+}
+
+/* USER CODE BEGIN 4 */
+
+void incValue(void)
+{
+
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_SET);
+
+	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+
+
+	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
+
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);
+}
+void decValue(void)
+{
+	    HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_RESET);
+
+		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+
+
+		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
+		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
+
+		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);
+
+}
+void saveMem(void)
+{
+
+	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_RESET);
+
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);
+
+}
+void shutDown(void)
+{
+
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_SET);
+}
+
+void AD5111_UpdateParamter(void)
+{
+	int i =0;
+	if (AD5111Pos < AD5111GoalPos)
+	{
+		for (i = AD5111Pos; i <= AD5111GoalPos; i++)
+
+		 {
+			incValue();
+			AD5111Pos = AD5111Pos +1;
+
+
+		    }
+	     }
+	else if (AD5111Pos > AD5111GoalPos)
+	 {
+		for (i = AD5111Pos; i >= AD5111GoalPos; i--)
+
+			{
+				decValue();
+				AD5111Pos = AD5111Pos -1;
+					}
+			    }
+
+
+}
+
+void AD5111_GoToMax(void)
+{
+	AD5111GoalPos = AD5111MaxPos;
+	AD5111_UpdateParamter();
+}
+
+void AD5111_GoToMin(void)
+{
+	 AD5111GoalPos = AD5111MinPos;
+     AD5111_UpdateParamter();
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == Button_Pin && Bussy == 0) // If The INT Source Is EXTI Line9 (A9 Pin)
+    {
+   // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle The Output (LED) Pin
+    Button_Status = 1 ;
+    Bussy = 1;
+   // HAL_ADC_Start_IT(&hadc1);
+
+      }
+
+    if(GPIO_Pin == UP_Pin && Bussy == 0) // If The INT Source Is EXTI Line9 (A9 Pin)
+        {
+           Button_UP = 1 ;
+           Bussy = 1;
+
+           //HAL_Delay(10);
+          }
+
+    if(GPIO_Pin == DOWN_Pin && Bussy == 0) // If The INT Source Is EXTI Line9 (A9 Pin)
+         {
+            Button_DOWN = 1 ;
+            Bussy = 1;
+
+           // HAL_Delay(10);
+
+           }
+
+
+}
+
+void onceClearLCD(void)
+{
+	if (countClear < 1 )
+		  {
+			  SSD1306_Clear();
+			  countClear+=1;
+
+		       }
+}
+
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

@@ -1,0 +1,47 @@
+21:06:07 **** Build of configuration Debug for project CRC_Example ****
+make -j4 all 
+arm-none-eabi-gcc "C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32L4P5xx -DUSE_HAL_DRIVER -DUSE_STM32L4XX_NUCLEO_144 -DDEBUG -c -I../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc -I../../../../../../../Drivers/BSP/STM32L4xx_Nucleo_144 -I../../Inc -I../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../../../../../../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Example/User/main.d" -MT"Example/User/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Example/User/main.o"
+arm-none-eabi-gcc "C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/stm32l4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32L4P5xx -DUSE_HAL_DRIVER -DUSE_STM32L4XX_NUCLEO_144 -DDEBUG -c -I../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc -I../../../../../../../Drivers/BSP/STM32L4xx_Nucleo_144 -I../../Inc -I../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../../../../../../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Example/User/stm32l4xx_hal_msp.d" -MT"Example/User/stm32l4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Example/User/stm32l4xx_hal_msp.o"
+arm-none-eabi-gcc "C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/stm32l4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32L4P5xx -DUSE_HAL_DRIVER -DUSE_STM32L4XX_NUCLEO_144 -DDEBUG -c -I../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc -I../../../../../../../Drivers/BSP/STM32L4xx_Nucleo_144 -I../../Inc -I../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../../../../../../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Example/User/stm32l4xx_it.d" -MT"Example/User/stm32l4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Example/User/stm32l4xx_it.o"
+arm-none-eabi-gcc "../Example/User/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32L4P5xx -DUSE_HAL_DRIVER -DUSE_STM32L4XX_NUCLEO_144 -DDEBUG -c -I../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc -I../../../../../../../Drivers/BSP/STM32L4xx_Nucleo_144 -I../../Inc -I../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../../../../../../../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Example/User/syscalls.d" -MT"Example/User/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Example/User/syscalls.o"
+In file included from ../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h:159,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h:29,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:27,
+                 from ../../Inc/stm32l4xx_hal_conf.h:193,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:29,
+                 from ../../Inc/main.h:24,
+                 from C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/stm32l4xx_hal_msp.c:20:
+../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4p5xx.h:170:10: fatal error: core_cm4.h: No such file or directory
+  170 | #include "core_cm4.h"             /* Cortex-M4 processor and core peripherals */
+      |          ^~~~~~~~~~~~
+compilation terminated.
+In file included from ../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h:159,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h:29,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:27,
+                 from ../../Inc/stm32l4xx_hal_conf.h:193,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:29,
+                 from ../../Inc/main.h:24,
+                 from C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/main.c:22:
+../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4p5xx.h:170:10: fatal error: core_cm4.h: No such file or directory
+  170 | #include "core_cm4.h"             /* Cortex-M4 processor and core peripherals */
+      |          ^~~~~~~~~~~~
+compilation terminated.
+In file included from ../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h:159,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h:29,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:27,
+                 from ../../Inc/stm32l4xx_hal_conf.h:193,
+                 from ../../../../../../../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:29,
+                 from ../../Inc/main.h:24,
+                 from C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/STM32Cube_FW_L4_V1.17.0/Projects/NUCLEO-L4P5ZG/Examples/CRC/CRC_Example/Src/stm32l4xx_it.c:22:
+../../../../../../../Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4p5xx.h:170:10: fatal error: core_cm4.h: No such file or directory
+  170 | #include "core_cm4.h"             /* Cortex-M4 processor and core peripherals */
+      |          ^~~~~~~~~~~~
+compilation terminated.
+make: *** [Example/User/subdir.mk:33: Example/User/stm32l4xx_hal_msp.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Example/User/subdir.mk:35: Example/User/stm32l4xx_it.o] Error 1
+make: *** [Example/User/subdir.mk:31: Example/User/main.o] Error 1
+"make -j4 all" terminated with exit code 2. Build might be incomplete.
+
+21:06:07 Build Failed. 7 errors, 0 warnings. (took 588ms)
+
