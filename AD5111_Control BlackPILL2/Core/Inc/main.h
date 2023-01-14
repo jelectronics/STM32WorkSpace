@@ -76,6 +76,9 @@ void Error_Handler(void);
 #define DOWN_Pin GPIO_PIN_13
 #define DOWN_GPIO_Port GPIOB
 #define DOWN_EXTI_IRQn EXTI15_10_IRQn
+#define ButtonLightingTime_Pin GPIO_PIN_14
+#define ButtonLightingTime_GPIO_Port GPIOB
+#define ButtonLightingTime_EXTI_IRQn EXTI15_10_IRQn
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

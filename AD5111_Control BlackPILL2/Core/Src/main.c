@@ -40,11 +40,13 @@ int AD5111MinPos = 0;
 int Button_Status = 0;
 int Button_UP = 0;
 int Button_DOWN = 0;
+int ButtonLightingTime = 0;
+int BLT_Counter = 0;
 int countClear = 0;
 int Bussy = 0;
 int EnableUP = 1 ;
 int EnableDOWN = 1;
-int32_t T1_PulseWide= 45; // 45us
+int32_t T1_PulseWide= 50; // 45us
 int32_t T1_Periode = 1500; // 1.5ms
 // OledDisplay -------------------------------
 char Pos[5];
@@ -152,6 +154,22 @@ int main(void)
 //clear once display
 
 
+// Button to change lighting time ----------------------
+	  if (ButtonLightingTime ==1)
+	  {
+		  if (BLT_Counter < 3)
+		  {
+			  BLT_Counter++ ;
+			  TIM1->CCR1 = T1_PulseWide*BLT_Counter;
+		     }
+		  else
+		   {
+			  BLT_Counter = 0;
+		      }
+
+		   ButtonLightingTime = 0;
+	      }
+//------------------------------------------------------
 // increment by button up ------------------------------
 
 
@@ -501,8 +519,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(UP_DOWN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : UP_Pin DOWN_Pin */
-  GPIO_InitStruct.Pin = UP_Pin|DOWN_Pin;
+  /*Configure GPIO pins : UP_Pin DOWN_Pin ButtonLightingTime_Pin */
+  GPIO_InitStruct.Pin = UP_Pin|DOWN_Pin|ButtonLightingTime_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -638,6 +656,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
            // HAL_Delay(10);
+
+           }
+
+    if(GPIO_Pin == ButtonLightingTime_Pin ) // If The INT Source Is EXTI Line9 (A9 Pin)
+         {
+
+    	     ButtonLightingTime = 1 ;
+
+            // HAL_Delay(10);
 
            }
 
