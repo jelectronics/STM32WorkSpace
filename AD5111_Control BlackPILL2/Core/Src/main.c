@@ -35,7 +35,7 @@
 //Digital pot-----------------
 int AD5111Pos = 0;
 int AD5111GoalPos = 0;
-int AD5111MaxPos = 32;
+int AD5111MaxPos = 127;
 int AD5111MinPos = 0;
 int Button_Status = 0;
 int Button_UP = 0;
@@ -521,31 +521,35 @@ static void MX_GPIO_Init(void)
 void incValue(void)
 {
 
+
 	HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_SET);
 
 	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);// here was cs to reset
 
 
 	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+
 	HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
 
-	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);// here was cs to set
 }
 void decValue(void)
 {
+
 	    HAL_GPIO_WritePin(UP_DOWN_GPIO_Port,UP_DOWN_Pin,GPIO_PIN_RESET);
 
 		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_RESET);// here was cs to reset
 
 
 		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
 		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_RESET);
+
 		HAL_GPIO_WritePin(CLK_GPIO_Port,CLK_Pin,GPIO_PIN_SET);
 
-		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);
+		HAL_GPIO_WritePin(CS_GPIO_Port,CS_Pin,GPIO_PIN_SET);// here was cs to set
 
 }
 void saveMem(void)
